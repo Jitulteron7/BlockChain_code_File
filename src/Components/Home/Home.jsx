@@ -3,6 +3,7 @@ import "./Home.css";
 import img from "../../img/home.png"
 import axiosInstance from "../../helper/AxiosInstance";
 import axios from "axios"
+
 const Home =()=>{
 
     const [file, setFile] = useState(''); 

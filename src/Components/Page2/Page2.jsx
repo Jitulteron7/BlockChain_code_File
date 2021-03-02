@@ -4,17 +4,17 @@ import {useParams} from "react-router-dom"
 import axios from "axios"
 import ShowFile from "../ShowFile/ShowFile";
 import {Link} from "react-router-dom"
-// import pdf from "./Files/pdf/1916125_Exp3.pdf";
+import pdf from "../../Files/pdf/1916125_Exp3.pdf";
 import img from "../../logo.svg"
 // ../../Files/pdf/${user.pdf_location}
 
-class Car extends React.Component {
+// class Car extends React.Component {
 
-    render() {
-        let pdf = require("./Files/pdf/1916125_Exp3.pdf")
-      return pdf;
-    }
-  }
+//     render() {
+//         let pdf = require("./Files/pdf/1916125_Exp3.pdf")
+//       return pdf;
+//     }
+//   }
 const Page2=()=>{
     
     const string=useParams()
@@ -48,7 +48,7 @@ const Page2=()=>{
       
             <div class="div1 col s8">
 
-               {user?<ShowFile url={user.pdf_location} />:<h4>Certificate will be displayed here</h4>}
+               {user?<ShowFile url={pdf} />:<h4>Certificate will be displayed here</h4>}
                 
                 
             </div>

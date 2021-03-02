@@ -44,7 +44,7 @@ export default function Test({url}) {
     <> 
     <div className="main showFile"> 
       <Document 
-        file={`../../Files/pdf/${url}`}
+        file={url1}
         
         onLoadSuccess={onDocumentLoadSuccess} 
       > 
