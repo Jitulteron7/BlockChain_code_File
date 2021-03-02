@@ -2,6 +2,7 @@ import React,{useEffect,useState} from "react";
 import "./Page.css";
 import {useParams} from "react-router-dom"
 import axios from "axios"
+import ShowFile from "../ShowFile/ShowFile";
 import {Link} from "react-router-dom"
 // import pdf from "./Files/pdf/1916125_Exp3.pdf";
 import img from "../../logo.svg"
@@ -19,25 +20,25 @@ const Page2=()=>{
     const string=useParams()
     const [user,setUser]=useState({});
     
-    const url=`./../../Files/pdf/${user.pdf_location}`;
+    const url=`../../Files/pdf/${user.pdf_location}`;
     const Download=()=>{
         window.location.href = "http://localhost:3000/src/Files/pdf/"+user.pdf_location;
     }
     
+    const fetchData= async ()=>{
+        // console.log(string.string);
+        const data= await axios.get(`http://localhost:5000/data/${string.string}`);
+        if(data){
+            setUser(data.data.data)
+            // console.log(data.data.data);
+            // console.log(user.pdf_location);
+        }
+    }
     useEffect( ()=>{
         
-        const fetchData= async ()=>{
-            console.log(string.string);
-            const data= await axios.get(`http://localhost:5000/data/${string.string}`);
-            if(data){
-                setUser(data.data.data)
-                console.log(data.data.data);
-                console.log(user.pdf_location);
-            }
-        }
-        
+    
         fetchData()
-    },[user])
+    },[])
 
     
 
@@ -46,8 +47,9 @@ const Page2=()=>{
     <div class="row page">
       
             <div class="div1 col s8">
-                <h4>Certificate will be displayed here</h4>
-                {console.log(user.pdf_location)}
+
+               {user?<ShowFile url={user.pdf_location} />:<h4>Certificate will be displayed here</h4>}
+                
                 
             </div>
             <div class="div2 col s3">
@@ -62,7 +64,7 @@ const Page2=()=>{
                 </div>
                 <div className="buttonIs">
                     <button className="">Verify</button>
-                    <button className=""><a href={pdf} download type="button">Download pdf</a></button>
+                    <button className=""><a href={`../../Files/pdf/${user.pdf_location}`} download type="button">Download pdf</a></button>
                 </div>
             </div>
     </div>

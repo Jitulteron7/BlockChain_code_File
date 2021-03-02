@@ -1,0 +1,11 @@
+.react-pdf__Page__canvas{
+    height: 500px !important;
+}
+
+.showFile button{
+    background-color:#00b0ff;
+}
+
+.showFile button:hover{
+    background-color:#0593d5;
+}
