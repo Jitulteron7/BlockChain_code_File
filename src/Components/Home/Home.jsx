@@ -5,30 +5,43 @@ import axiosInstance from "../../helper/AxiosInstance";
 import axios from "axios"
 
 const Home =()=>{
-
+    // excel
     const [file, setFile] = useState(''); 
-    const [file2, setFile2] = useState(''); 
+    // pdf
+    const [file2, setFile2] = useState({}); 
+    // progress bar code
     const [data, getFile] = useState({ name: "", path: "" });   
      const [progress, setProgess] = useState(0); 
+    
     const el = useRef(); 
     const sl=useRef();
+
+    // excel
     const handleChange = (e) => {
         setProgess(0)
         const file = e.target.files[0]; // accesing file
         console.log(file);
         setFile(file); // storing file
     }
+    // pdf 
     const handleChange2 = (e) => {
         setProgess(0)
-        const file = e.target.files[0]; // accesing file
-        console.log(file);
+        const file = e.target.files; // accesing file
         setFile2(file); // storing file
     }
+
+    // upload function
     const uploadFile = () => {
         const formData = new FormData(); 
-        const formData2 = new FormData();        
-        formData.append('file', file);
-        formData.append('file2', file2);
+        
+        // pdf 
+        for (let i=0;i<file2.length;i++){
+            formData.append(`file${i}`,file2[i]);
+        }
+        // excel
+        formData.append('file',file);
+        
+    
         axios.post('http://localhost:5000/tutor/upload/files', formData, {
             onUploadProgress: (ProgressEvent) => {
                 let progress = Math.round(
@@ -40,7 +53,8 @@ const Home =()=>{
             getFile({ name: res.data.name,
                      path: 'http://localhost:4500' + res.data.path
                    })
-        }).catch(err => console.log(err))}
+        }).catch(err => console.log(err))
+    }
 
     
     return(<>

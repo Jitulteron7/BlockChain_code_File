@@ -3,7 +3,7 @@ import Home from "./Components/Home/Home";
 import Nav from "./Components/Nav/NavBar";
 import {Route,BrowserRouter} from "react-router-dom";
 import Page2 from "./Components/Page2/Page2";
-
+import Page3 from "./Components/Page3/Page3";
 function App() {
   return (
     <BrowserRouter >
@@ -14,6 +14,9 @@ function App() {
       </Route>
       <Route  path="/page2/:string">
         <Page2/>
+      </Route>
+      <Route  path="/page3">
+        <Page3/>
       </Route>
     </BrowserRouter>
   );
