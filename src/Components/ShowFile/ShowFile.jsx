@@ -1,13 +1,13 @@
 import React, { useState ,useEffect} from 'react'; 
 import { Document, Page,pdfjs } from "react-pdf"; 
-import url1 from "../../Files/pdf/HR_Oyester.pdf"  
+import url1 from "../../Files/pdf/certificate.pdf"  
 import "./showFile.css";  
 
 
   
 export default function Test({url}) { 
       
-    console.log(url=="HR_Oyester.pdf",url,"HR_Oyester.pdf");
+    
   pdfjs.GlobalWorkerOptions.workerSrc =  
   `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`; 
   const [numPages, setNumPages] = useState(null); 
@@ -37,7 +37,7 @@ export default function Test({url}) {
   } 
 
   useEffect(()=>{
-
+    console.log(`../../Files/pdf/${url}`)
   },[url])
   
   return ( 
@@ -50,31 +50,9 @@ export default function Test({url}) {
       > 
         <Page pageNumber={pageNumber} /> 
       </Document> 
-      <div> 
-        <div className="pagec"> 
-          Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'} 
-        </div> 
-        <div className="buttonc"> 
-        <button 
-          type="button"
-          disabled={pageNumber <= 1} 
-          onClick={previousPage} 
-          className="Pre waves-effect waves-light btn"
-            
-        > 
-          Previous 
-        </button> 
-        <button 
-          type="button"
-          disabled={pageNumber >= numPages} 
-          onClick={nextPage} 
-          className="waves-effect waves-light btn"
-           
-        > 
-          Next 
-        </button> 
-        </div> 
-      </div> 
+      <div className="buttonIsShow">
+          <button className="btn icon_btn"><a type="" download href={url1} ><i className="large material-icons">get_app</i><a  type="button">Download pdf</a></a></button>
+      </div>
       </div> 
     </> 
   ); 

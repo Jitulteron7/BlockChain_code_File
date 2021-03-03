@@ -1,0 +1,35 @@
+.upper_logo{
+    display: flex;
+color: #AACC00 !important;
+}
+
+.upper_logo img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:50px;
+    width:50px;
+    border-radius: 50px;
+}
+.logo_pic img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:50px;
+    width:50px;
+    border-radius: 50px;
+}
+.logo_align{
+    margin-top: 5px;
+    margin: 5px;
+}
+nav ul li a{
+    color: #AACC00 !important;
+}
+nav ul li a:hover{
+        color: #fff !important;
+}
+nav ul li:hover{
+    background-color:#AACC00;
+    
+}

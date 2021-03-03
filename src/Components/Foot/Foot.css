@@ -1,0 +1,16 @@
+.page-footer{
+    position: relative;
+    bottom:-20px;
+    background-color:#fff;
+}
+
+.page-footer h5{
+    color:#AACC00 !important;
+}
+.page-footer p{
+    color:#AACC00 !important;
+}
+.footer-copyright{
+    color:#fff!important;
+    background-color: #94af09 !important;
+}
