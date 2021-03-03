@@ -27,7 +27,7 @@ const Page2=()=>{
     
     const fetchData= async ()=>{
         // console.log(string.string);
-        const data= await axios.get(`http://localhost:5000/data/${string.string}`);
+        const data= await axios.get(`${window.location.protocol}//${window.location.hostname}:5000/data/${string.string}`);
         if(data){
             setUser(data.data.data)
             // console.log(data.data.data);

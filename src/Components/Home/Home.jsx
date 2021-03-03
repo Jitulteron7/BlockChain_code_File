@@ -42,7 +42,7 @@ const Home =()=>{
         formData.append('file',file);
         
     
-        axios.post('http://localhost:5000/tutor/upload/files', formData, {
+        axios.post(`${window.location.protocol}//${window.location.hostname}:5000/tutor/upload/files`, formData, {
             onUploadProgress: (ProgressEvent) => {
                 let progress = Math.round(
                 ProgressEvent.loaded / ProgressEvent.total * 100) + '%';

@@ -45,7 +45,7 @@ const Home =()=>{
         formData.append('file',file);
         formData.append('data',JSON.stringify(totData));
         
-        axios.post('http://localhost:5000/tutor/upload/file',
+        axios.post(`${window.location.protocol}//${window.location.hostname}:5000/tutor/upload/file`,
         
        formData, {
             onUploadProgress: (ProgressEvent) => {
