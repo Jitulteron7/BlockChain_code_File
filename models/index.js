@@ -35,7 +35,7 @@ const Certificates = db.define('certificate', {
   },
   //
   training_code: {
-    type: DataTypes.INTEGER(255),
+    type: DataTypes.STRING(255),
     allowNull: true,
   },
   //

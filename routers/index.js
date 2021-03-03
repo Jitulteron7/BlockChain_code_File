@@ -15,24 +15,31 @@ const provider = new HDWalletProvider(
     );
     
     const web3 = new Web3(provider);
-    // ,training_title,batch_trainer,name,batch_start_date,batch_code,pdf_location
-    const deploy = async (filehash,data,nameIs) => {
+    // blockchain deploy for multiple pdfs 
+    const deploy = async (filehash,data,nameIs,get) => {
+        
 
         try{
+            // name of the pdf
+          let namePdf=get.name
+               
             const accounts = await web3.eth.getAccounts();
             console.log('account address ', accounts[0]);
 
-            
+            // unique Id (for dev using random string )
+
            let testIs=randomString.generate({length:20});
            
-        //    await deploy(testIs,hashCertificate,d[`TrainingTitle`],d[`Batch_Trainer`],d[`Staff_Name`],d[`BatchStartDate`],d[`Batch Code`],`${myFile2.name}`);
-        let hh = await factory.methods.addData(
-            testIs,
-            filehash
+        // generating the trasaction_hash
+          let hh = await factory.methods.addData(
+
+            testIs ,/*id */
+            filehash /*pdf hash file*/
+
           ).send({gas:'1000000' , from: accounts[0]}).on('transactionHash',async function(hash){
             //---------------------
             // code of DB
-          
+        //   create the data one by one 
             let get={
                 training_title:data[`TrainingTitle`],
                 batch_trainer:data[`Batch_Trainer`],
@@ -41,27 +48,27 @@ const provider = new HDWalletProvider(
                 string:testIs,
                 certificate_hash:filehash,
                 batch_code:data[`Batch Code`],
-                pdf_location:`${nameIs}`,
-                transaction_hash:hash
+                pdf_location:`${namePdf}`,
+                transaction_hash:hash,
+                stuff_name:data[`Staff_Name`],
+                training_code:data[`TrainingCode`],
+                stuff_no:data[`Staff_EmpNumber`]
                }
            
 
                  
-                     Certificate.create(get)
-                     
-                
+                   await  Certificate.create(get)
+ 
             
-            
-
         //--------------------------
         
         });
            
 
            
-        console.log(data[`S/No`],"from deploy");
-        console.log(data,"from deploy");
-        console.log(hh);
+        // console.log(data[`S/No`],"from deploy");
+        // console.log(data,"from deploy");
+        // console.log(hh);
    
 
         } catch(e){
@@ -69,7 +76,7 @@ const provider = new HDWalletProvider(
         }
       };
 
-
+// blockchain deploy for single pdfs 
       const deploy2 = async (filehash,data) => {
 
         try{
@@ -81,11 +88,13 @@ const provider = new HDWalletProvider(
            
         
         let hh = await factory.methods.addData(
-            testIs,
-            filehash
+            testIs,/*id */
+            filehash/*pdf hash file*/
           ).send({gas:'1000000' , from: accounts[0]}).on('transactionHash',async function(hash){
             //---------------------
             // code of DB
+            // create row data and save
+
                  let get={
                      ...data,
                      transaction_hash:hash
@@ -102,9 +111,6 @@ const provider = new HDWalletProvider(
         });
            
 
-           
-        // console.log(data[`S/No`],"from deploy");
-        // console.log(data,"from deploy");
         console.log(hh);
 
         } catch(e){
@@ -115,6 +121,8 @@ const provider = new HDWalletProvider(
 
 
     //------------------------------------------------------------
+
+    // XLSX npm data extraction function
 const dataExtract= async (file)=>{
     const workbook= XLSX.readFile(`${__dirname}/../../../blockchain/src/Files/excel/${file}`);
     var data = [];
@@ -157,70 +165,101 @@ const dataExtract= async (file)=>{
     return info;
     
 }
-// file upload api
+
+// multipe file upload route
 router.post('/tutor/upload/files',async (req, res) => {
     try{
            if (!req.files) {
-        return res.status(500).send({ msg: "file is not found" })
-    }
-        // accessing the file
-    const myFile = req.files.file;
-    const myFile2 = req.files;
-    console.log(myFile,"data excel");
-    console.log(myFile2,"data pdf");
-    myFile.mv(`${__dirname}/../../../blockchain/src/Files/excel/${myFile.name}`,async function (err) {
-        if (err) {
-            console.log(err)
-            return res.status(500).send({ msg: "Error occured" });
-        }
-        
-        myFile2.mv(`${__dirname}/../../../blockchain/src/Files/pdf/${myFile2.name}`,async function (err) {
-            if (err) {
-                console.log(err)
-                return res.status(500).send({ msg: "Error occured" });
+                return res.status(500).send({ msg: "file is not found" })
             }
+            
+        // accessing the excel file
+    const myFile = req.files.file;
+    // converting file object to array and using only the value not the key 
+
+    // console.log(Object.keys(req.files).map((key)=>req.files[key]));
+
+    let allPdfs=Object.keys(req.files).map((key)=>{
+        if(key!="file"){
+            return req.files[key]
+        }
+    })
+
+    // save the pdf and excel file seperately logic
+
+    allPdfs.map((get,index)=>{
+
+        // pdf in the last index
+        // pdf file index !=lastindex 
+        if(allPdfs.length!=index+1){
+            
+            // save pdf
+            myFile.mv(`${__dirname}/../../../blockchain/src/Files/pdf/${get.name}`,async function (err) {
+                    if (err) {
+                        console.log(err)
+                        return res.status(500).send({ msg: "Error occured" });
+                    }
+                    
+                    // save excel
+                myFile.mv(`${__dirname}/../../../blockchain/src/Files/excel/${myFile.name}`,async function (err) {
+                        if (err) {
+                            console.log(err)
+                            return res.status(500).send({ msg: "Error occured" });
+                        }
+
+                    })
+                }) 
+        }
+    })
 
 
-
-            let hashCertificate= await sha256.sha256(myFile2.name);
-
-           
-
-            let data= await dataExtract(myFile.name);
-
-        let info=[];
-
-        console.log(data);
-         data.map(async (d,index)=>{
-            await deploy(hashCertificate,d,myFile2.name);
-            console.log(d[`S/No`],"from map");
-            console.log(d,"from map data");
+                    
+                        // data exraction from excel
+                        let data= await dataExtract(myFile.name);
+            
+                        
+                
+                        // save data and pass all hash pdf certificate to blockchain
+                        data.map(async (d,index)=>{
+                            // hashing pdf
+                            let hashCertificate= await sha256.sha256(allPdfs[index].name);
+                            // block chain function
+                            await deploy(hashCertificate, d  , myFile.name ,  allPdfs[index]);
+                           
+                           
+                        })
+    
+        }
+            catch(e){
+                
+                res.status(400).send({err:e,message:"Error"});
+            }
         })
- 
-        })
-        
-      
-    });
-}
-    catch(e){
-        console.log(e,"Jitul Teorn");
-        res.status(400).send({err:e});
-       }
-})
 
 
+
+// single file upload route
 router.post("/tutor/upload/file",async(req,res)=>{
     try{
+
+
+        // id
         let testIs=randomString.generate({length:20});
+        // pdf 
         let myfile=req.files.file;
+        // hash
         let hashCertificate= await sha256.sha256(myfile.name);
+        // get the data from the form
         let data=JSON.parse(req.body.data);
+        // saveing with more data
         let allData={
             ...data,
             string:testIs,
             certificate_hash:hashCertificate,
             pdf_location:`${myfile.name}`
         }
+
+        // save pdf file
         myfile.mv(`${__dirname}/../../../blockchain/src/Files/pdf/${myfile.name}`,async (err)=>{
                     if(err){
                         console.log(err)
@@ -233,47 +272,38 @@ router.post("/tutor/upload/file",async(req,res)=>{
                     });
                 })
         
-        // let info=await Certificate.create(JSON.parse(data));
-        // if(info){
-        //     myfile.mv(`${__dirname}/../../../blockchain/src/Files/pdf/${myfile.name}`,async (err)=>{
-        //         if(err){
-        //             console.log(err)
-        //             return res.status(400).send({ msg: "Error occured" });
-        //         }
-        //        return res.status(201).json({
-        //             success:1,
-        //             message:"Saved sucessfully"
-        //         });
-        //     })
-        // }
-    }
-    catch(e){
-        return res.json({
-            success:0,
-            message:"Error :"+e
-        })
-    }
+
+        }
+        catch(e){
+            return res.json({
+                success:0,
+                message:"Error :"+e
+            })
+        }
 })
 
 
 
+// route to get the saved files 
 router.get("/data/:string",async (req,res)=>{
 try{
+
+
+
    let string=req.params.string;
-   console.log(string);
-   const sql1 = `SELECT 
+//    console.log(string);
+//    const sql1 = `SELECT 
                  
-   certificates.batch_code,
-   certificates.name,
-   certificates.batch_trainer
-   FROM
-   certificates 
-   WHERE  
-   certificates.string=${string}
-  `;
+//    certificates.batch_code,
+//    certificates.name,
+//    certificates.batch_trainer
+//    FROM
+//    certificates 
+//    WHERE  
+//    certificates.string=${string}
+//   `;
 
 
-// const result = await db.query(sql1, { type: db.QueryTypes.SELECT }); 
 const result =await Certificate.findOne({
     where: {certificate_id:1}
 });
