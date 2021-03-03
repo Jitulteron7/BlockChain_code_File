@@ -77,7 +77,7 @@ const provider = new HDWalletProvider(
       };
 
 // blockchain deploy for single pdfs 
-      const deploy2 = async (filehash,data) => {
+      const deploy2 = async (filehash,data,res) => {
 
         try{
             const accounts = await web3.eth.getAccounts();
@@ -99,13 +99,8 @@ const provider = new HDWalletProvider(
                      ...data,
                      transaction_hash:hash
                  }
-                 let complete=await    Certificate.create(get)
-                 if(complete){
-                     return res.status(200).json({
-                         sucess:1,
-                         message:"Saved sucessfully"
-                     })
-                 }
+                 await    Certificate.create(get)
+                 
             //--------------------------
         
         });
@@ -306,10 +301,11 @@ try{
 
 
 const result =await Certificate.findOne({
-    where: {certificate_id:1}
+    where: {string:string}
 });
 
  return   res.send({data:result,path:`${__dirname}/public/data.xlsx`,string:string});
+
 
 }
 catch(e){
