@@ -61,13 +61,8 @@ const Home =()=>{
     <div className="Home">
         <div className="File">
             <div className="body">
-                <img src={img} />
+                {/* <img src={img} /> */}
                 <h3>Drop Your File Here</h3>
-            </div>
-            <div className="progessBar" style={{ width: progress }}>
-                     {progress}
-                </div>
-            <div className="bottom">
                 <form action="#">
                     <div class="file-field input-field">
                     <div class="btn" style={{backgroundColor:"#76ff03 "}}>
@@ -92,6 +87,17 @@ const Home =()=>{
                     </div>
                     </div>
                 </form>
+            </div>
+            
+            <div className="bottom">
+                
+                <div className="progessBar" style={{ width: progress }}>
+                     {progress}
+                     
+                </div>
+                    <div class="progress">
+                        <div class="determinate" style={{width:`${progress}`}}></div>
+                    </div>
             </div>
             {data.path && <img src={data.path} alt={data.name} />}
         </div>

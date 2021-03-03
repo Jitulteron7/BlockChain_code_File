@@ -22,10 +22,6 @@ const Page2=()=>{
     const string=useParams()
     const [user,setUser]=useState({});
     
-    const url=`../../Files/pdf/${user.pdf_location}`;
-    const Download=()=>{
-        window.location.href = "http://localhost:3000/src/Files/pdf/"+user.pdf_location;
-    }
     
     const fetchData= async ()=>{
         // console.log(string.string);
@@ -34,7 +30,7 @@ const Page2=()=>{
             setUser(data.data.data)
             
             // console.log(data.d ata.data);
-            console.log(user.pdf_location);
+            
             
         }
     }
@@ -48,56 +44,56 @@ const Page2=()=>{
 
     return(<>
     
-    <div class="response page">
+    {user?<div class="response page">
       
-            <div class="div1 card ">
+      <div class="div1 card ">
 
-               {user?<ShowFile url={user.pdf_location} />:<h4>Certificate will be displayed here</h4>}
-                
-                
-            </div>
-            <div class="div2  card">
-                    <div>
-                        <img src={img}/>
-                        
-                    </div>
-                <div className="content_page">
-                    
-                    <div>
-                    <h3>Issued</h3>
-                    <h4>{user?user.stuff_name:"NO"}</h4>
-                    </div>
-                    <div>
-                    <h3>Trainer Name</h3>
-                    <h4>{user?user.batch_trainer:"NO"}</h4>
-                    </div>
-                    <div>
-                    <h3>Training  code</h3>
-                    <h4>{user?user.training_code:"NO"}</h4>
-                    </div>
-                    <div>
-                    <h3>Batch Code</h3>
-                    <h4> {user?user.batch_code:"NO"}</h4>
-                    </div>
-                    <div>
-                    <h3>Batach Duration</h3>
-                    <h4> {user?user.batch_start_date:"NO"}</h4>
-                    </div>
-                    <div>
-                    <h3>Transsaction ID</h3>
-                    <p style={{width:"500px",textAlign:"left"}}>{user?user.transaction_hash:"NO"}</p>
-                    </div>
-                    <div>
-                    <h3>Hash</h3>
-                    <p style={{width:"500px",textAlign:"left"}}>{user?user.certificate_hash:"NO"}</p>
-                    </div>
-                </div>
-                <div className="buttonIs">
-                    <button className="btn icon_btn"><span class="Small material-icons">gavel</span><span>Verify</span></button>
-                   
-                </div>
-            </div>
-    </div>
+         {user?<ShowFile url={user.pdf_location} />:<h4>Certificate will be displayed here</h4>}
+          
+          
+      </div>
+      <div class="div2  card">
+              <div>
+                  <img src={img}/>
+                  
+              </div>
+          <div className="content_page">
+              
+              <div>
+              <h3>Issued</h3>
+              <h4>{user?user.stuff_name:"NO"}</h4>
+              </div>
+              <div>
+              <h3>Trainer Name</h3>
+              <h4>{user?user.batch_trainer:"NO"}</h4>
+              </div>
+              <div>
+              <h3>Training  code</h3>
+              <h4>{user?user.training_code:"NO"}</h4>
+              </div>
+              <div>
+              <h3>Batch Code</h3>
+              <h4> {user?user.batch_code:"NO"}</h4>
+              </div>
+              <div>
+              <h3>Batach Duration</h3>
+              <h4> {user?user.batch_start_date:"NO"}</h4>
+              </div>
+              <div>
+              <h3>Transsaction ID</h3>
+              <p style={{width:"500px",textAlign:"left"}}>{user?user.transaction_hash:"NO"}</p>
+              </div>
+              <div>
+              <h3>Hash</h3>
+              <p style={{width:"500px",textAlign:"left"}}>{user?user.certificate_hash:"NO"}</p>
+              </div>
+          </div>
+          <div className="buttonIs">
+              <button className="btn icon_btn"><span class="Small material-icons">gavel</span><span>Verify</span></button>
+             
+          </div>
+      </div>
+</div>:<div>Loading</div>}
     </>);
 
 
