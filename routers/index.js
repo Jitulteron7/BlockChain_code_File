@@ -31,8 +31,9 @@ const provider = new HDWalletProvider(
            let testIs=randomString.generate({length:20});
            
         // generating the trasaction_hash
+        factory.methods.viewData(testIs).call
           let hh = await factory.methods.addData(
-
+            
             testIs ,/*id */
             filehash /*pdf hash file*/
 
@@ -76,6 +77,21 @@ const provider = new HDWalletProvider(
         }
       };
 
+
+
+    //   viewData
+    const DataCheck=async (string)=>{
+        try{
+            let data=await factory.methods.viewData(string).call();
+            return data;
+            
+        }
+        catch (e){
+            
+            console.log(e);
+        }
+    }
+    
 // blockchain deploy for single pdfs 
       const deploy2 = async (filehash,data,res) => {
 
@@ -161,6 +177,35 @@ const dataExtract= async (file)=>{
     
 }
 
+
+router.get("/verify/:id",async (req,res)=>{
+
+    let check= await  DataCheck(req.params.id);
+    let data= await Certificate.findOne({
+            where: {string:req.params.id}
+    })
+    console.log(req.params.id,"id");
+    console.log(check,"blobk");
+    console.log(check==data.certificate_hash);
+    console.log(data.certificate_hash,"db");
+    if(data.certificate_hash!=check){
+         res.status(200).json({
+            success:true,
+            message:"verified"
+        })
+    }
+    else{
+        res.status(200).json({
+            success:false,
+            message:"invalid"
+        })
+    }
+
+})
+
+
+
+
 // multipe file upload route
 router.post('/tutor/upload/files',async (req, res) => {
     try{
@@ -216,13 +261,27 @@ router.post('/tutor/upload/files',async (req, res) => {
                 
                         // save data and pass all hash pdf certificate to blockchain
                         data.map(async (d,index)=>{
-                            // hashing pdf
+                           try{
+                                // hashing pdf
                             let hashCertificate= await sha256.sha256(allPdfs[index].name);
                             // block chain function
                             await deploy(hashCertificate, d  , myFile.name ,  allPdfs[index]);
+                            if(index+1==data.length){
+                                return res.status(201).json({
+                                    success:true,
+                                    message:"Uploaded Successfully"
+                                })
+                            }
                            
-                           
+                           }
+                           catch(e){
+                               return res.status(400).json({
+                                success:false,
+                                message:"Something went wrong" 
+                               })
+                           }
                         })
+                        
 
     
         }
@@ -285,7 +344,7 @@ router.get("/data/:string",async (req,res)=>{
 try{
 
 
-
+    
    let string=req.params.string;
 //    console.log(string);
 //    const sql1 = `SELECT 
@@ -313,5 +372,9 @@ res.send({err:e})
 }
 
 })
+
+
+
+
 
 module.exports=router;
