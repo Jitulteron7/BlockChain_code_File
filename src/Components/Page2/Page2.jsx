@@ -77,6 +77,7 @@ const Page2=()=>{
 
         
         fetchData()
+        console.log(user.pdf_location);
     },[])
     const Click=()=>{
 
@@ -171,7 +172,7 @@ const showVerification=(condition)=>{
             <li><h4>Fetching Document</h4><span style={{color:"#4ED4FF"}} class="not Small material-icons">access_time_filled</span><span class="done Small material-icons" style={{color:"#AACC00"}}>check_circle</span></li>
             <li><h4>Generating Hash and Comparing</h4><span style={{color:"#4ED4FF"}} class="not Small material-icons">access_time_filled</span><span class="done Small material-icons" style={{color:"#AACC00"}}>check_circle</span></li>
             <li><h4>Verifying Cryptographic Signature</h4><span  style={{color:"#4ED4FF"}}class="not Small material-icons">access_time_filled</span><span className="done Small material-icons" style={conditionIs?{color:"#AACC00"}:{color:"red"}}>{conditionIs?"check_circle":"error"}</span></li>
-            <li><h4>Checking Revocation Status</h4><span style={{color:"#4ED4FF"}} class="not Small material-icons">access_time_filled</span><span className="done Small material-icons" style={conditionIs?{color:"#AACC00"}:{color:"red"}}>{conditionIs?"check_circle":"error"}</span></li>
+            {/* <li><h4>Checking Revocation Status</h4><span style={{color:"#4ED4FF"}} class="not Small material-icons">access_time_filled</span><span className="done Small material-icons" style={conditionIs?{color:"#AACC00"}:{color:"red"}}>{conditionIs?"check_circle":"error"}</span></li> */}
             
         </ul>
         {conditionIs?<div className="message_done">

@@ -45,7 +45,7 @@ const Home =()=>{
             ,classes:"file_upload_notification"})
           }
           let load=document.querySelector("#load_fileIn.uploading_file");
-          load.style.height="90%"
+          load.style.height="80%"
            load.style.display="block"
 
         const formData = new FormData(); 
@@ -66,7 +66,7 @@ const Home =()=>{
             }
         }).then(res => {
             if(res.data.success){
-                
+                load.style.display="none"
                 M.toast({html:`
                         <div class="file_upload_notification">
                             <span class="material-icons">
@@ -193,3 +193,7 @@ const Home =()=>{
 }
 
 export default Home;
+
+
+
+// 

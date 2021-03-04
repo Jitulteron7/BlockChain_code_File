@@ -3,9 +3,26 @@ import { Document, Page,pdfjs } from "react-pdf";
 import url1 from "../../Files/pdf/certificate.pdf"  
 import "./showFile.css";  
 
-export default function Test({url}) { 
+export default function Test(params) { 
       
+  const downloadCertificate=()=>{
+    console.log("kela kela",__dirname,params.url);
+    //creating an invisible element 
+    var element = document.createElement('a'); 
+    element.setAttribute('href',  
+    'data:text/plain;charset=utf-8, ' 
+    + encodeURIComponent(`../../Files/pdf/${params.url}`)); 
+    element.setAttribute('download', "test.pdf"); 
+  
     
+  
+    document.body.appendChild(element); 
+  
+
+    element.click(); 
+  
+    document.body.removeChild(element); 
+  }
   pdfjs.GlobalWorkerOptions.workerSrc =  
   `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`; 
   const [numPages, setNumPages] = useState(null); 
@@ -35,8 +52,8 @@ export default function Test({url}) {
   } 
 
   useEffect(()=>{
-    console.log(`../../Files/pdf/${url}`)
-  },[url])
+    // console.log(`../../Files/pdf/${url}`)
+  },[])
   
   return ( 
     <> 
@@ -48,7 +65,7 @@ export default function Test({url}) {
         <Page pageNumber={pageNumber} /> 
       </Document> 
       <div className="buttonIsShow">
-          <button className="btn icon_btn"><a type="" download href={url1} ><i className="large material-icons">get_app</i><a  type="button">Download pdf</a></a></button>
+          <button onClick={()=>{/*downloadCertificate()*/}} className="btn icon_btn"><a type="" href={`../../Files/pdf/${params.url}`} download ><i className="large material-icons">get_app</i><a  type="button">Download pdf</a></a></button>
       </div>
       </div> 
     </> 
