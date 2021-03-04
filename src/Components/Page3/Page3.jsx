@@ -2,7 +2,8 @@ import React,{useState,useRef} from "react";
 import "./Page3.css";
 import img from "../../img/home.png"
 import axiosInstance from "../../helper/AxiosInstance";
-import axios from "axios"
+import axios from "axios";
+import M from "materialize-css"
 
 const Home =()=>{
 
@@ -17,7 +18,7 @@ const Home =()=>{
     const [stuff_name,set_stuff_name]=useState("");
     const [stuff_no,set_stuff_no]=useState();
     const [training_code,set_training_code]=useState();
-
+    const [load,setLoad]=useState(true)
     const [data, getFile] = useState({ name: "", path: "" });   
      const [progress, setProgess] = useState(0);
     const sl=useRef();
@@ -61,15 +62,60 @@ const Home =()=>{
         }).catch(err => console.log(err))
     }
 
-    
+    const dummy=()=>{
+        
+    //    let load=document.querySelector("#load_fileIn.uploading_file");
+    //    load.style.display="block"
+    //     setTimeout(()=>{
+    //         load.style.display="none"
+            
+    //     },5000 )
+        M.toast({html:`
+                    <div class="file_upload_notification">
+                        <span class="material-icons">
+                            check_circle_outline
+                        </span>
+                        <span >Uploaded data and pdf sucessfully</span>
+                    </div>`
+                    ,classes:"file_upload_notification"})
+                
+        // M.toast({html:`
+        // <div class="file_upload_notification_error">
+        //     <span class="material-icons">
+        //     error_outline
+        //     </span>
+        //     <span >Unable to upload !</span>
+        // </div>`
+        // ,classes:"file_upload_notification"})
+        
+    }
     return(<>
+    
+    <div id="load_fileIn" className="uploading_file">
+        <div className="loading">
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue-only">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
     <div className="Page3">
         <div className="File row">
             <div className=" col l12">
             <div className="body ">
                 
                 <div class="row">
+                    <center><h3 className="details_h3">Details</h3></center>
+                    <center><div className="detail_bar"></div></center>
                     <form class="col s12">
+                    
                     <div class="row">
                         <div class="input-field col s6">
                         
@@ -128,13 +174,16 @@ const Home =()=>{
                     </div>
                     </div>
                 </form>
-                <div className="progessBar" style={{ width: progress }}>
+                {/* <div className="progessBar" style={{ width: progress }}>
                          {progress}
-                    </div>
+                    </div> */}
+                    {/* <div class="progress card">
+                        <div class="determinate" style={{width:`${50}%`}}></div>
+                    </div> */}
             </div>
             {data.path && <img src={data.path} alt={data.name} />}
         </div>
-        <center><button onClick={()=>{uploadFile()}} class="waves-effect waves-light btn">UPLOAD</button></center>
+        <center><button onClick={()=>{/*uploadFile()*/dummy()}} class="waves-effect waves-light btn">UPLOAD</button></center>
     </div>
     </>);
 

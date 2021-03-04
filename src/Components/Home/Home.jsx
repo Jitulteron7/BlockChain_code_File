@@ -2,7 +2,8 @@ import React,{useState,useRef} from "react";
 import "./Home.css";
 import img from "../../img/home.png"
 import axiosInstance from "../../helper/AxiosInstance";
-import axios from "axios"
+import axios from "axios";
+import M from "materialize-css"
 
 const Home =()=>{
     // excel
@@ -56,17 +57,62 @@ const Home =()=>{
         }).catch(err => console.log(err))
     }
 
-    
+    const dummy=()=>{
+        
+           let load=document.querySelector("#load_fileIn.uploading_file");
+           load.style.display="block"
+            setTimeout(()=>{
+                load.style.display="none"
+                
+            },5000 )
+            M.toast({html:`
+                        <div class="file_upload_notification">
+                            <span class="material-icons">
+                                check_circle_outline
+                            </span>
+                            <span >Uploaded data and pdf sucessfully</span>
+                        </div>`
+                        ,classes:"file_upload_notification"})
+                    
+            // M.toast({html:`
+            // <div class="file_upload_notification_error">
+            //     <span class="material-icons">
+            //     error_outline
+            //     </span>
+            //     <span >Unable to upload !</span>
+            // </div>`
+            // ,classes:"file_upload_notification"})
+            
+        }
     return(<>
+     <div id="load_fileIn" className="uploading_file">
+        <div className="loading">
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue-only">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
     <div className="Home">
         <div className="File">
             <div className="body">
                 {/* <img src={img} /> */}
-                <h3>Drop Your File Here</h3>
+                <h3>Upload Your File Here</h3>
                 <form action="#">
                     <div class="file-field input-field">
-                    <div class="btn" style={{backgroundColor:"#76ff03 "}}>
-                        <span>Excel</span>
+                    <div class="btn" style={{backgroundColor:"#AACC00",fontSize:"1.2rem",borderRadius:"40px",width:"100%",fontWeight:"bold"}}>
+                    <div className="inner_btn">
+                            <span class="Small material-icons">upload_file</span>
+                            <span>Excel</span>
+                    </div>
+                        
                         
                         <input type="file" accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="multiplefile" ref={el} onChange={handleChange}  multiple/>
                     </div>
@@ -77,8 +123,11 @@ const Home =()=>{
                 </form>
                 <form action="#">
                     <div class="file-field input-field">
-                    <div class="btn " >
-                        <span>Pdf</span>
+                    <div class="btn " style={{backgroundColor:"#00b0ff",fontSize:"1.2rem",borderRadius:"40px",width:"100%",fontWeight:"bold"}}>
+                    <div className="inner_btn">
+                            <span class="Small material-icons">picture_as_pdf</span>
+                            <span>Pdf</span>
+                    </div>
                         
                         <input accept="application/pdf" type="file" name="multiplefile" ref={sl} onChange={handleChange2}  multiple/>
                     </div>
@@ -91,17 +140,17 @@ const Home =()=>{
             
             <div className="bottom">
                 
-                <div className="progessBar" style={{ width: progress }}>
+                {/* <div className="progessBar" style={{ width: progress }}>
                      {progress}
                      
-                </div>
-                    <div class="progress">
-                        <div class="determinate" style={{width:`${progress}`}}></div>
+                </div> */}
+                    <div class="progress card">
+                        <div class="determinate" style={{width:`${50}%`}}></div>
                     </div>
             </div>
             {data.path && <img src={data.path} alt={data.name} />}
         </div>
-        <center><button onClick={()=>{uploadFile()}} class="waves-effect waves-light btn">UPLOAD</button></center>
+        <center> <button onClick={()=>{/*uploadFile()*/dummy()}} class="waves-effect waves-light btn"><span class="Small material-icons">upload</span><span>UPLOAD</span></button></center>
     </div>
     </>);
 
