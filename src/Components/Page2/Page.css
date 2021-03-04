@@ -96,7 +96,72 @@ img{
     color:#fff
 
 }
+.table_data li .done1{
+    display:none;
+    justify-content:center;
+    align-items:center; 
+}
+.table_data li .done{
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+.table_data li .not{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.table_data {
+    display: none;
+    margin:20px auto;
+    width: 55%;
+}
+.table_data h3{
+    font-size:2.2rem;
+    margin-bottom: 40px;
+    font-weight:700
+}
+.table_data ul li h4{
+    font-size:1.2rem;
+    font-weight:700
+}
+.table_data ul li p{
+    display:none;
+}
+.table_data ul li span{
+    display:none;
+}
+.table_data ul li{
+    
+ display: flex;
+ justify-content:space-between;
+ 
 
+}
+.table_data .message_not{
+    display:none;
+    color:#fff;
+    font-size:1.2rem;
+    font-weight:700;
+    justify-content:center;
+    align-items:center;
+    background-color:#e2561f
+}
+.table_data .message_done{
+    display:none;
+    color:#fff;
+    font-size:1.2rem;
+    font-weight:700;
+    justify-content:center;
+    align-items:center;
+    background-color:#91e21f
+}
+.timmer{
+   width:100%;     
+    display: none;
+    justify-content:center;
+    align-items: center;
+}
 
 @media screen and (max-width:1230px){
     .response{

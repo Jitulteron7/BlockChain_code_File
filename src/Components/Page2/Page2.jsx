@@ -5,23 +5,36 @@ import axios from "axios"
 import ShowFile from "../ShowFile/ShowFile";
 import {Link} from "react-router-dom"
 import pdf from "../../Files/pdf/1916125_Exp3.pdf";
-import img from "../../img/banner.png"
-// ../../Files/pdf/${user.pdf_location}
+import img from "../../img/banner.png";
+import M from "materialize-css";
+import {useLottie} from "lottie-react"
+import animation from "../../img/layer.json"
 
-// class Car extends React.Component {
+import {Done1,Done2,Done3,Done} from "../Anime/Anime"
 
-//     render() {
-//         let pdf = require("./Files/pdf/1916125_Exp3.pdf")
-//       return pdf;
 
-//     }
-//   }
+const Anime=()=>{
+const style={
+  height:200,
+
+}
+
+  const options = {
+    animationData: animation,
+    loop: true,
+    autoplay: true,
+  };
+  const { View } = useLottie(options, style);
+  
+  return View;
+}
+
 
 const Page2=()=>{
     
     const string=useParams()
     const [user,setUser]=useState({});
-    
+    const [conditionIs,setCondition]=useState(false);
     
     const fetchData= async ()=>{
         // console.log(string.string);
@@ -34,17 +47,69 @@ const Page2=()=>{
             
         }
     }
-    useEffect( ()=>{
+    const showLi=()=>{
+        let li=document.querySelectorAll(".table_data ul li .done");
+        let li2=document.querySelectorAll(".table_data ul li .not");
+        let div=document.querySelector(".table_data .message_done");
+        let div1=document.querySelector(".table_data .message_not");
         
+        for (let i=0;i<li.length;i++){
+            setTimeout( ()=>{
+                li[i].style.display="flex";
+                li2[i].style.display="none";
+                
+                if(i+1==li.length){
+                    if(div){
+                        div.style.display="flex";
+                    }
+                    if(div1){
+                        div1.style.display="flex";
+                        }
+                    
+                    
+                }
+                
+            },1000*(i+1));
+        }
+    }
+    useEffect( ()=>{
     
+
+        
         fetchData()
     },[])
+    const Click=()=>{
 
+        let time=document.querySelector(".timmer")
+        time.style.display="flex";
+        setTimeout(()=>{
+            time.style.display="none";
+            
+            axios.get(`${window.location.protocol}//${window.location.hostname}:5000/verify/${string.string}`)
+            .then(res=>
+                {
+                    console.log(res.data)
+                    
+                        showVerification(res.data.success);
+                    
+                })
+                
+                .catch(e=>console.log(e))
+        },5000)
+
+    }
     
-
+const showVerification=(condition)=>{
+    setCondition(condition)
+    let verification=document.querySelector(".table_data");
+    verification.style.display="block";
+    showLi()
+}
     return(<>
     
-    {user?<div class="response page">
+    {user?
+    <>
+    <div class="response page">
       
       <div class="div1 card ">
 
@@ -89,11 +154,35 @@ const Page2=()=>{
               </div>
           </div>
           <div className="buttonIs">
-              <button className="btn icon_btn"><span class="Small material-icons">gavel</span><span>Verify</span></button>
+              <button onClick={()=>{Click()}} className="btn icon_btn"><span class="Small material-icons">gavel</span><span>Verify</span></button>
              
           </div>
       </div>
-</div>:<div>Loading</div>}
+      
+      
+</div>
+<div className="timmer">
+<Anime/>
+</div>
+<div className="table_data">
+<center><h3>Verification</h3></center>
+        <ul>
+            <li><h4>Fetching EnCrypted Hash from Blockchain</h4><span style={{color:"#4ED4FF"}} class="not Small material-icons">access_time_filled</span><span class="done Small material-icons" style={{color:"#AACC00"}}>check_circle</span></li>
+            <li><h4>Fetching Document</h4><span style={{color:"#4ED4FF"}} class="not Small material-icons">access_time_filled</span><span class="done Small material-icons" style={{color:"#AACC00"}}>check_circle</span></li>
+            <li><h4>Generating Hash and Comparing</h4><span style={{color:"#4ED4FF"}} class="not Small material-icons">access_time_filled</span><span class="done Small material-icons" style={{color:"#AACC00"}}>check_circle</span></li>
+            <li><h4>Verifying Cryptographic Signature</h4><span  style={{color:"#4ED4FF"}}class="not Small material-icons">access_time_filled</span><span className="done Small material-icons" style={conditionIs?{color:"#AACC00"}:{color:"red"}}>{conditionIs?"check_circle":"error"}</span></li>
+            <li><h4>Checking Revocation Status</h4><span style={{color:"#4ED4FF"}} class="not Small material-icons">access_time_filled</span><span className="done Small material-icons" style={conditionIs?{color:"#AACC00"}:{color:"red"}}>{conditionIs?"check_circle":"error"}</span></li>
+            
+        </ul>
+        {conditionIs?<div className="message_done">
+            <p>Sucessfully Verified</p>
+        </div>:
+        <div className="message_not">
+            <p>Invalid Document</p>
+        </div>}
+</div>
+</>
+:<div>Loading</div>}
     </>);
 
 

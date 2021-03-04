@@ -32,6 +32,20 @@ const Home =()=>{
     }
     
     const uploadFile = () => {
+       if(!file||!batch_code||!batch_trainer||!training_title||!stuff_name||!training_code||!stuff_name||!batch_start_date){
+        M.toast({html:`
+        <div class="file_upload_notification_error">
+            <span class="material-icons">
+            error_outline
+            </span>
+            <span >Please add all the fields !</span>
+        </div>`
+        ,classes:"file_upload_notification"})
+       }else{
+        
+        let load=document.querySelector("#load_fileIn.uploading_file");
+        load.style.display="block"
+        load.style.height="105%"
         const formData = new FormData(); 
        
         let totData={ batch_code,
@@ -56,37 +70,46 @@ const Home =()=>{
             }
         }).then(res => {
             console.log(res);
+            dummy(res.data.success)
+            
             getFile({ name: res.data.name,
                      path: 'http://localhost:4500' + res.data.path
                    })
+                   
         }).catch(err => console.log(err))
+       }
     }
 
-    const dummy=()=>{
+    const dummy=(boolen)=>{
+        if(boolen){
+
+            M.toast({html:`
+                        <div class="file_upload_notification">
+                            <span class="material-icons">
+                                check_circle_outline
+                            </span>
+                            <span >Pushed certificate to Blockchain Successfully</span>
+                        </div>`
+                        ,classes:"file_upload_notification"})
+          }else{
+           M.toast({html:`
+           <div class="file_upload_notification_error">
+               <span class="material-icons">
+               error_outline
+               </span>
+               <span >Unable to upload !</span>
+           </div>`
+           ,classes:"file_upload_notification"})
+          }
+
+        let load=document.querySelector("#load_fileIn.uploading_file");
+        load.style.display="none";
+          document.querySelectorAll("input").values=""
         
-    //    let load=document.querySelector("#load_fileIn.uploading_file");
-    //    load.style.display="block"
-    //     setTimeout(()=>{
-    //         load.style.display="none"
             
-    //     },5000 )
-        M.toast({html:`
-                    <div class="file_upload_notification">
-                        <span class="material-icons">
-                            check_circle_outline
-                        </span>
-                        <span >Uploaded data and pdf sucessfully</span>
-                    </div>`
-                    ,classes:"file_upload_notification"})
+       
                 
-        // M.toast({html:`
-        // <div class="file_upload_notification_error">
-        //     <span class="material-icons">
-        //     error_outline
-        //     </span>
-        //     <span >Unable to upload !</span>
-        // </div>`
-        // ,classes:"file_upload_notification"})
+        
         
     }
     return(<>
@@ -181,9 +204,9 @@ const Home =()=>{
                         <div class="determinate" style={{width:`${50}%`}}></div>
                     </div> */}
             </div>
-            {data.path && <img src={data.path} alt={data.name} />}
+            
         </div>
-        <center><button onClick={()=>{/*uploadFile()*/dummy()}} class="waves-effect waves-light btn">UPLOAD</button></center>
+        <center><button onClick={()=>{uploadFile()}} class="waves-effect waves-light btn">UPLOAD</button></center>
     </div>
     </>);
 

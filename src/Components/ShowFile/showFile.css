@@ -20,3 +20,14 @@
 
 
 
+@media screen and (max-width:850px){
+    .react-pdf__Page__canvas{
+        max-height: 300px !important;
+        border:1px solid #000 ;
+        border-radius:5px;
+        width:100% !important;
+    }
+    .div1{
+        height: 430px;
+    }
+}

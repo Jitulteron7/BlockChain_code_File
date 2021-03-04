@@ -3,8 +3,6 @@ import { Document, Page,pdfjs } from "react-pdf";
 import url1 from "../../Files/pdf/certificate.pdf"  
 import "./showFile.css";  
 
-
-  
 export default function Test({url}) { 
       
     
@@ -45,7 +43,6 @@ export default function Test({url}) {
     <div className="main showFile"> 
       <Document 
         file={url1}
-        
         onLoadSuccess={onDocumentLoadSuccess} 
       > 
         <Page pageNumber={pageNumber} /> 

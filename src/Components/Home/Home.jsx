@@ -33,6 +33,21 @@ const Home =()=>{
 
     // upload function
     const uploadFile = () => {
+        if(!file||!file2)
+          {
+            return  M.toast({html:`
+            <div class="file_upload_notification_error">
+                <span class="material-icons">
+                error_outline
+                </span>
+                <span >Please add all the fields !</span>
+            </div>`
+            ,classes:"file_upload_notification"})
+          }
+          let load=document.querySelector("#load_fileIn.uploading_file");
+          load.style.height="90%"
+           load.style.display="block"
+
         const formData = new FormData(); 
         
         // pdf 
@@ -50,15 +65,37 @@ const Home =()=>{
                 setProgess(progress);
             }
         }).then(res => {
-            console.log(res);
-            getFile({ name: res.data.name,
+            if(res.data.success){
+                
+                M.toast({html:`
+                        <div class="file_upload_notification">
+                            <span class="material-icons">
+                                check_circle_outline
+                            </span>
+                            <span >Pushed certificates to Blockchain Successfully</span>
+                        </div>`
+                        ,classes:"file_upload_notification"})
+                getFile({ name: res.data.name,
                      path: 'http://localhost:4500' + res.data.path
                    })
+            }else{
+                setFile("");
+                setFile2("");
+                M.toast({html:`
+                <div class="file_upload_notification_error">
+                    <span class="material-icons">
+                    error_outline
+                    </span>
+                    <span >Unable to upload !</span>
+                </div>`
+                ,classes:"file_upload_notification"})
+            }
+            
         }).catch(err => console.log(err))
     }
 
     const dummy=()=>{
-        
+
            let load=document.querySelector("#load_fileIn.uploading_file");
            load.style.display="block"
             setTimeout(()=>{
@@ -70,18 +107,18 @@ const Home =()=>{
                             <span class="material-icons">
                                 check_circle_outline
                             </span>
-                            <span >Uploaded data and pdf sucessfully</span>
+                            <span >Pushed certificates to Blockchain Successfully</span>
                         </div>`
                         ,classes:"file_upload_notification"})
                     
-            // M.toast({html:`
-            // <div class="file_upload_notification_error">
-            //     <span class="material-icons">
-            //     error_outline
-            //     </span>
-            //     <span >Unable to upload !</span>
-            // </div>`
-            // ,classes:"file_upload_notification"})
+            M.toast({html:`
+            <div class="file_upload_notification_error">
+                <span class="material-icons">
+                error_outline
+                </span>
+                <span >Unable to upload !</span>
+            </div>`
+            ,classes:"file_upload_notification"})
             
         }
     return(<>
@@ -100,6 +137,7 @@ const Home =()=>{
         </div>
         </div>
     </div>
+
     <div className="Home">
         <div className="File">
             <div className="body">
@@ -144,13 +182,10 @@ const Home =()=>{
                      {progress}
                      
                 </div> */}
-                    <div class="progress card">
-                        <div class="determinate" style={{width:`${50}%`}}></div>
-                    </div>
+                    
             </div>
-            {data.path && <img src={data.path} alt={data.name} />}
         </div>
-        <center> <button onClick={()=>{/*uploadFile()*/dummy()}} class="waves-effect waves-light btn"><span class="Small material-icons">upload</span><span>UPLOAD</span></button></center>
+        <center> <button onClick={()=>{uploadFile()/*dummy()*/}} class="waves-effect waves-light btn"><span class="Small material-icons">upload</span><span>UPLOAD</span></button></center>
     </div>
     </>);
 
