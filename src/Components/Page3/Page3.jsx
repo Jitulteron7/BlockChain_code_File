@@ -39,7 +39,7 @@ const Home =()=>{
         //     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         //     return re.test(String(email).toLowerCase());
         // }
-       if(!staff_email||!certificate_name||!file||!batch_code||!batch_trainer||!training_title||!staff_no||!training_code||!staff_name||!batch_duration){
+       if(!staff_email||!file||!batch_trainer||!training_title||!staff_name||!batch_duration){
         M.toast({html:`
         <div class="file_upload_notification_error">
             <span class="material-icons">
@@ -60,9 +60,6 @@ const Home =()=>{
             batch_duration,
             training_title,
             staff_name:staff_name,
-            staff_no:staff_no,
-            training_code,
-            certificate_name,
             staff_email
         }
        
@@ -156,23 +153,13 @@ const Home =()=>{
                         </div>
                         <div class="input-field col s6">
                         <input onChange={(e)=>{set_stuff_name(e.target.value)}} id="Stuff_Name" type="text" class="validate" />
-                        <label for="Stuff_Name">Stuff Name</label>
+                        <label for="Stuff_Name">Staff Name</label>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="input-field col s6">
-                        <input onChange={(e)=>{set_stuff_no(e.target.value)}}  id="Stuff_No" type="number" class="validate" />
-                        <label for="Stuff_No">Stuff No</label>
-                        </div>
                         <div class="input-field col s6">
                         <input onChange={(e)=>{set_training_title(e.target.value)}} id="Training_Title" type="text" class="validate" />
                         <label for="Training_Title">Training Title</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                        <input  onChange={(e)=>{set_training_code(e.target.value)}} id="Training_code" type="number" class="validate" />
-                        <label for="Training_code">Training code</label>
                         </div>
                         <div class="input-field col s6">
                         <input onChange={(e)=>{set_batch_trainer(e.target.value)}} id="Batch_Trainer" type="text" class="validate" />
@@ -180,10 +167,7 @@ const Home =()=>{
                         </div>
                     </div>
                     <div class="row">
-                        <div class="input-field col s6">
-                        <input  onChange={(e)=>{set_certificate_name(e.target.value)}} id="certificate_name" type="text" class="validate" />
-                        <label for="certificate_name">Certificate Name</label>
-                        </div>
+                        
                         <div class="input-field col s6">
                         <input onChange={(e)=>{set_staff_email(e.target.value)}} id="staff_email" type="email" class="validate" />
                         <label for="staff_email">Staff Email</label>
@@ -192,7 +176,7 @@ const Home =()=>{
                     <div class="row">
                         <div class="input-field col s6">
                         <input  onChange={(e)=>{set_batch_start_date(e.target.value)}} id="Batch_Start_Date" type="date" class="validate" />
-                        <label for="Batch_Start_Date">Batch Start Date</label>
+                        <label for="Batch_Start_Date">Batch Duration Date</label>
                         </div>
                         
                     </div>
