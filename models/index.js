@@ -14,16 +14,11 @@ const Certificates = db.define('certificate', {
     type: DataTypes.INTEGER(255),
     allowNull: false,
   },
-  //
   staff_name: {
     type: DataTypes.STRING(255),
     allowNull: false,
-  },
-  //
-  staff_no:{
-    type:DataTypes.INTEGER,
-    allowNull:false,
-  },
+  }
+,
   staff_email: {
     type: DataTypes.STRING(255),
     allowNull: false,
@@ -34,11 +29,7 @@ const Certificates = db.define('certificate', {
     allowNull: false,
   },
   //
-  training_code: {
-    type: DataTypes.STRING(255),
-    allowNull: false,
-  },
-  //
+
   batch_duration: {
     type: DataTypes.STRING(255),
     allowNull: false,
@@ -58,12 +49,12 @@ const Certificates = db.define('certificate', {
   //   allowNull: true,
   // },
   //
-  string:{
-    type: DataTypes.STRING(255),
+  // string:{
+  //   type: DataTypes.STRING(255),
    
-    allowNull: false
+  //   allowNull: false
 
-  },
+  // },
   //
   certificate_hash:{
     type:DataTypes.STRING(255),
@@ -76,11 +67,8 @@ const Certificates = db.define('certificate', {
   
     allowNull:false,
   },
-  certificate_name:{
-    type:DataTypes.STRING(255),
-  
-    allowNull:false,
-  }
+
+
   
 });
 

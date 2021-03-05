@@ -35,7 +35,7 @@ const provider = new HDWalletProvider(
         factory.methods.viewData(testIs).call
           let hh = await factory.methods.addData(
             
-            testIs ,/*id */
+            filehash ,/*id */
             filehash /*pdf hash file*/
 
           ).send({gas:'1000000' , from: accounts[0]}).on('transactionHash',async function(hash){
@@ -54,11 +54,11 @@ const provider = new HDWalletProvider(
                 certificate_location:`${namePdf}`,
                 transaction_hash:hash,
                 staff_name:data[`Staff_Name`],
-                training_code:data[`TrainingCode`],
-                staff_no:data[`Staff_EmpNumber`],
+                // training_code:data[`TrainingCode`],
+                // staff_no:data[`Staff_EmpNumber`],
                 staff_email:data[`Staff_Email`],
-                certificate_name:data[`Certificate_Name`],
-                string:testIs
+                // certificate_name:data[`Certificate_Name`],
+                
                }
            
 
