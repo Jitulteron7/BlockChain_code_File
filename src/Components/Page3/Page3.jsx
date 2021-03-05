@@ -13,10 +13,12 @@ const Home =()=>{
     // all the data state
     const [batch_code,set_batch_code]=useState();
     const [batch_trainer,set_batch_trainer]=useState("");
-    const [batch_start_date,set_batch_start_date]=useState("");
+    const [batch_duration,set_batch_start_date]=useState("");
     const [training_title,set_training_title]=useState("");
-    const [stuff_name,set_stuff_name]=useState("");
-    const [stuff_no,set_stuff_no]=useState();
+    const [staff_name,set_stuff_name]=useState("");
+    const [staff_no,set_stuff_no]=useState();
+    const [certificate_name,set_certificate_name]=useState("");
+    const [staff_email,set_staff_email]=useState("");
     const [training_code,set_training_code]=useState();
     const [load,setLoad]=useState(true)
     const [data, getFile] = useState({ name: "", path: "" });   
@@ -32,7 +34,12 @@ const Home =()=>{
     }
     
     const uploadFile = () => {
-       if(!file||!batch_code||!batch_trainer||!training_title||!stuff_name||!training_code||!stuff_name||!batch_start_date){
+        
+        // if(){
+        //     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        //     return re.test(String(email).toLowerCase());
+        // }
+       if(!staff_email||!certificate_name||!file||!batch_code||!batch_trainer||!training_title||!staff_no||!training_code||!staff_name||!batch_duration){
         M.toast({html:`
         <div class="file_upload_notification_error">
             <span class="material-icons">
@@ -45,16 +52,18 @@ const Home =()=>{
         
         let load=document.querySelector("#load_fileIn.uploading_file");
         load.style.display="block"
-        load.style.height="105%"
+        load.style.height="115%"
         const formData = new FormData(); 
        
         let totData={ batch_code,
             batch_trainer,
-            batch_start_date,
+            batch_duration,
             training_title,
-            stuff_name,
-            stuff_no,
-            training_code
+            staff_name:staff_name,
+            staff_no:staff_no,
+            training_code,
+            certificate_name,
+            staff_email
         }
        
         formData.append('file',file);
@@ -168,6 +177,16 @@ const Home =()=>{
                         <div class="input-field col s6">
                         <input onChange={(e)=>{set_batch_trainer(e.target.value)}} id="Batch_Trainer" type="text" class="validate" />
                         <label for="Batch_Trainer">Batch Trainer</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                        <input  onChange={(e)=>{set_certificate_name(e.target.value)}} id="certificate_name" type="text" class="validate" />
+                        <label for="certificate_name">Certificate Name</label>
+                        </div>
+                        <div class="input-field col s6">
+                        <input onChange={(e)=>{set_staff_email(e.target.value)}} id="staff_email" type="email" class="validate" />
+                        <label for="staff_email">Staff Email</label>
                         </div>
                     </div>
                     <div class="row">
