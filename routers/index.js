@@ -4,11 +4,12 @@ const {db}=require("../db/sql");
 const Certificate=require("../models/index")
 const randomString=require("randomstring");
 const sha256=require("js-sha256");
+const Email  =require("../models/email");
 //---------------------------------------
 const HDWalletProvider = require('truffle-hdwallet-provider');
 const Web3 = require('web3');
 const factory = require('../Ethereum/certificate') ;
-
+const moment=require("moment")
 const provider = new HDWalletProvider(
     'frame apart post kick armed refuse limb armed annual jaguar apart cliff' ,
     'https://rinkeby.infura.io/v3/1ec6558c6dba4a9db1ab5f5b647d9a60'
@@ -40,25 +41,29 @@ const provider = new HDWalletProvider(
           ).send({gas:'1000000' , from: accounts[0]}).on('transactionHash',async function(hash){
             //---------------------
             // code of DB
-        //   create the data one by one 
+            //   create the data one by one 
+            console.log(data[`Staff_Email`],"EMial is ");
+            console.log(data[`Certificate_Name`],"EMial is ");
             let get={
                 training_title:data[`TrainingTitle`],
                 batch_trainer:data[`Batch_Trainer`],
-                name:data[`Staff_Name`],
-                batch_start_date:data[`BatchStartDate`],
-                string:testIs,
+                staff_name:data[`Staff_Name`],
+                batch_duration:data[`BatchStartDate`],
                 certificate_hash:filehash,
                 batch_code:data[`Batch Code`],
-                pdf_location:`${namePdf}`,
+                certificate_location:`${namePdf}`,
                 transaction_hash:hash,
-                stuff_name:data[`Staff_Name`],
+                staff_name:data[`Staff_Name`],
                 training_code:data[`TrainingCode`],
-                stuff_no:data[`Staff_EmpNumber`]
+                staff_no:data[`Staff_EmpNumber`],
+                staff_email:data[`Staff_Email`],
+                certificate_name:data[`Certificate_Name`],
+                string:testIs
                }
            
 
                  
-                   await  Certificate.create(get)
+                   await Certificate.create(get);
  
             
         //--------------------------
@@ -182,12 +187,28 @@ router.get("/verify/:id",async (req,res)=>{
 
     let check= await  DataCheck(req.params.id);
     let data= await Certificate.findOne({
-            where: {string:req.params.id}
+            where: {certificate_hash:req.params.id}
     })
-    console.log(req.params.id,"id");
-    console.log(check,"blobk");
-    console.log(check==data.certificate_hash);
-    console.log(data.certificate_hash,"db");
+    
+    // console.log(req.params.id,"id");
+    // console.log(check,"blobk");
+    // console.log(check==data.certificate_hash);
+    // console.log(data.certificate_hash,"db");
+    const resultEmail=await Email.findOne({
+        where: {send_date:moment().format("MMMM Do YYYY")}
+    });
+    // console.log(resultEmail,"result");
+    if(resultEmail!=null||resultEmail!=[]){
+        let newCount=resultEmail.verify_count+1
+        const Email_Modify=await Email.update(
+            {
+                verify_count:newCount
+            },{returning: true,
+                where:{send_date:moment().format("MMMM Do YYYY")}
+            })
+        // )
+        console.log(Email_Modify,"updated view");
+    }
     if(data.certificate_hash!=check){
          res.status(200).json({
             success:true,
@@ -267,6 +288,22 @@ router.post('/tutor/upload/files',async (req, res) => {
                             // block chain function
                             await deploy(hashCertificate, d  , myFile.name ,  allPdfs[index]);
                             if(index+1==data.length){
+                                const resultEmail=await Email.findOne({
+                                    where: {send_date:moment().format("MMMM Do YYYY")}
+                                });
+                                // console.log(resultEmail,"result");
+                                if(resultEmail!=null||resultEmail!=[]){
+
+                                    let newCount=resultEmail.send_count+data.length
+                                    const Email_Modify=await Email.update(
+                                        {
+                                            send_count:newCount
+                                        },{returning: true,
+                                            where:{send_date:moment().format("MMMM Do YYYY")}
+                                        })
+                                    // )
+                                    console.log(Email_Modify,"updated view");
+                                }
                                 return res.status(201).json({
                                     success:true,
                                     message:"Uploaded Successfully"
@@ -311,7 +348,7 @@ router.post("/tutor/upload/file",async(req,res)=>{
             ...data,
             string:testIs,
             certificate_hash:hashCertificate,
-            pdf_location:`${myfile.name}`
+            certificate_location:`${myfile.name}`
         }
 
         // save pdf file
@@ -321,6 +358,22 @@ router.post("/tutor/upload/file",async(req,res)=>{
                         return res.status(400).send({ msg: "Error occured" });
                     }
                     await deploy2(hashCertificate,allData);
+
+                    const resultEmail=await Email.findOne({
+                        where: {send_date:moment().format("MMMM Do YYYY")}
+                    });
+                    // console.log(resultEmail,"result");
+                    if(resultEmail!=null||resultEmail!=[]){
+                        let newCount=resultEmail.send_count+1
+                        const Email_Modify=await Email.update(
+                            {
+                                send_count:newCount
+                            },{returning: true,
+                                where:{send_date:moment().format("MMMM Do YYYY")}
+                            })
+                        // )
+                        console.log(Email_Modify,"updated view");
+                    }
                     return res.status(201).json({
                         success:1,
                         message:"Saved sucessfully"
@@ -338,32 +391,54 @@ router.post("/tutor/upload/file",async(req,res)=>{
 })
 
 
+const createDate= async()=>{
+    try{
+        const date=await Email.findOne({
+            where:{send_date:moment().format('MMMM Do YYYY')}
+          })
+          if(date==null){
+              const makeDate=await Email.create({
+                  send_Date:moment().format("MMMM Do YYYY")
+              })
+          }
+          
+    }
+    catch(e){
+        console.log(e);
+    }
+    // console.log(moment().format('MMMM Do YYYY'));
+  }
+  createDate()
 
 // route to get the saved files 
 router.get("/data/:string",async (req,res)=>{
 try{
-
-
     
    let string=req.params.string;
-//    console.log(string);
-//    const sql1 = `SELECT 
-                 
-//    certificates.batch_code,
-//    certificates.name,
-//    certificates.batch_trainer
-//    FROM
-//    certificates 
-//    WHERE  
-//    certificates.string=${string}
-//   `;
+    const result =await Certificate.findOne({
+    where: {certificate_hash:string}
+    });
+    const resultEmail=await Email.findOne({
+        where: {send_date:moment().format("MMMM Do YYYY")}
+    });
+    // console.log(resultEmail,"result");
+    if(resultEmail!=null||resultEmail!=[]){
+        let newView=resultEmail.view_count+1
+        console.log(newView);
+        const Email_Modify=await Email.update(
+            {
+                view_count:newView
+            },{returning: true,
+                where:{send_date:moment().format("MMMM Do YYYY")}
+            })
+        // )
+        console.log(Email_Modify,"updated view");
+    }
+    // if(result!=null){
+    //     const data =await Email.FindOne({})
+    // }
 
-
-const result =await Certificate.findOne({
-    where: {string:string}
-});
-
- return   res.send({data:result,path:`${__dirname}/public/data.xlsx`,string:string});
+    return  res.send({data:result,path:`${__dirname}/public/data.xlsx`,string:string});
 
 
 }
@@ -378,3 +453,23 @@ res.send({err:e})
 
 
 module.exports=router;
+
+
+// certificate_id(primary key-int255)
+// batch_code(int-255, Null-NO)
+// staff_name(varchar-255, Null-NO)
+// staff_email(varchar-255, Null NO)
+
+// tarining_title(varchar-255, Null NO)
+
+// batch_trainer(varchar-255, Null NO)
+
+// batch_duration(varchar-255, Null NO)
+// certificate_location(varchar-255, Null NO)
+
+// certificate_hash(varchar-255, Null NO)
+
+// transaction_hash(varchar-255, Null NO)
+
+// certificate_view(int-255, Null-NO, Default-0)
+// createdAt(datetime

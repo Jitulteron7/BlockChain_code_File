@@ -12,21 +12,21 @@ const Certificates = db.define('certificate', {
   //
   batch_code: {
     type: DataTypes.INTEGER(255),
-    allowNull: true,
+    allowNull: false,
   },
   //
-  stuff_name: {
+  staff_name: {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
   //
-  stuff_no:{
+  staff_no:{
     type:DataTypes.INTEGER,
-    allowNull:true,
+    allowNull:false,
   },
-  email: {
+  staff_email: {
     type: DataTypes.STRING(255),
-    allowNull: true,
+    allowNull: false,
   },
   //
   batch_trainer: {
@@ -36,27 +36,27 @@ const Certificates = db.define('certificate', {
   //
   training_code: {
     type: DataTypes.STRING(255),
-    allowNull: true,
+    allowNull: false,
   },
   //
-  batch_start_date: {
+  batch_duration: {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
   //
   training_title: {
-    type: DataTypes.TEXT('long'),
+    type: DataTypes.STRING(255),
     allowNull: false,
   },
   //
-  pdf_location: {
+  certificate_location: {
     type: DataTypes.STRING(255),
     allowNull: true,
   },
-  jpg_location: {
-    type: DataTypes.STRING(255),
-    allowNull: true,
-  },
+  // jpg_location: {
+  //   type: DataTypes.STRING(255),
+  //   allowNull: true,
+  // },
   //
   string:{
     type: DataTypes.STRING(255),
@@ -74,10 +74,36 @@ const Certificates = db.define('certificate', {
   transaction_hash:{
     type:DataTypes.STRING(255),
   
-    allowNull:true,
+    allowNull:false,
+  },
+  certificate_name:{
+    type:DataTypes.STRING(255),
+  
+    allowNull:false,
   }
+  
 });
 
   db.sync()
 
 module.exports = Certificates;
+
+
+
+// certificate_id(primary key-int255)
+
+// batch_code(int-255, Null-NO)*
+
+// staff_name(varchar-255, Null-NO)*
+
+// staff_email(varchar-255, Null-NO)*
+
+// tarining_title(varchar-255, Null-NO)*
+
+// batch_trainer(varchar-255, Null-NO)*
+
+// batch_duration(varchar-255, Null-NO)*
+
+// certificate_location(varchar-255, Null-NO)
+// certificate_hash(varchar-255, Null-NO)
+// transaction_hash(varchar-255, Null-NO)
