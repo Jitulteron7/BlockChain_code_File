@@ -82,7 +82,20 @@ const Home =()=>{
                      path: 'http://localhost:4500' + res.data.path
                    })
                    
-        }).catch(err => console.log(err))
+        }).catch(err => 
+            
+            {
+                let load=document.querySelector("#load_fileIn.uploading_file");
+                load.style.display="none";
+                M.toast({html:`
+            <div class="file_upload_notification_error">
+                <span class="material-icons">
+                error_outline
+                </span>
+                <span >Error! Unable to upload files</span>
+            </div>`
+            ,classes:"file_upload_notification"})
+            console.log(err)})
        }
     }
 

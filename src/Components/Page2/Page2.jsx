@@ -38,14 +38,29 @@ const Page2=()=>{
     
     const fetchData= async ()=>{
         // console.log(string.string);
-        const data= await axios.get(`${window.location.protocol}//${window.location.hostname}:5000/data/${string.string}`);
+        try{
+            const data= await axios.get(`${window.location.protocol}//${window.location.hostname}:5000/data/${string.string}`);
         if(data){
             setUser(data.data.data)
             
-            // console.log(data.d ata.data);
+            // console.log(data.d ata.data)   
+            }
+        } 
+        catch (e){
+            let load=document.querySelector("#load_fileIn.uploading_file");
+            load.style.display="none";
+            M.toast({html:`
+        <div class="file_upload_notification_error">
+            <span class="material-icons">
+            error_outline
+            </span>
+            <span >Error! Unable to upload files</span>
+        </div>`
+        ,classes:"file_upload_notification"})
+        console.log(e)
+
+                    }
             
-            
-        }
     }
     const showLi=()=>{
         let li=document.querySelectorAll(".table_data ul li .done");
@@ -95,7 +110,19 @@ const Page2=()=>{
                     
                 })
                 
-                .catch(e=>console.log(e))
+                .catch(e=> 
+                    {
+                        let load=document.querySelector("#load_fileIn.uploading_file");
+                        load.style.display="none";
+                        M.toast({html:`
+                    <div class="file_upload_notification_error">
+                        <span class="material-icons">
+                        error_outline
+                        </span>
+                        <span >Error! Unable Verify</span>
+                    </div>`
+                    ,classes:"file_upload_notification"})
+                    console.log(e)})
         },5000)
 
     }
